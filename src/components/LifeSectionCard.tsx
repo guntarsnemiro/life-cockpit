@@ -18,9 +18,10 @@ interface LifeSectionCardProps {
     ideas: string[];
   };
   onTaskComplete: () => void;
+  onSectionClick: () => void;
 }
 
-export const LifeSectionCard = ({ section, onTaskComplete }: LifeSectionCardProps) => {
+export const LifeSectionCard = ({ section, onTaskComplete, onSectionClick }: LifeSectionCardProps) => {
   const [currentIdeaIndex, setCurrentIdeaIndex] = useState(0);
   const [isTaskCompleted, setIsTaskCompleted] = useState(false);
 
@@ -49,10 +50,13 @@ export const LifeSectionCard = ({ section, onTaskComplete }: LifeSectionCardProp
   };
 
   return (
-    <div className={cn(
-      "glass-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:scale-[1.02]",
-      isTaskCompleted && "animate-pulse"
-    )}>
+    <div 
+      className={cn(
+        "glass-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:scale-[1.02] cursor-pointer",
+        isTaskCompleted && "animate-pulse"
+      )}
+      onClick={onSectionClick}
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-card/50 to-card/80"></div>
       
       <div className="relative z-10">
@@ -92,7 +96,10 @@ export const LifeSectionCard = ({ section, onTaskComplete }: LifeSectionCardProp
             <p className="text-foreground">{section.currentTask}</p>
             <Button 
               size="sm" 
-              onClick={completeTask}
+              onClick={(e) => {
+                e.stopPropagation();
+                completeTask();
+              }}
               disabled={isTaskCompleted}
               className={cn(
                 "ml-2",
@@ -114,7 +121,14 @@ export const LifeSectionCard = ({ section, onTaskComplete }: LifeSectionCardProp
             <p className="text-sm text-foreground flex-1 mr-2">
               {section.ideas[currentIdeaIndex]}
             </p>
-            <Button variant="outline" size="sm" onClick={getNewIdea}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={(e) => {
+                e.stopPropagation();
+                getNewIdea();
+              }}
+            >
               New Idea
             </Button>
           </div>

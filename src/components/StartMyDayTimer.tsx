@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw, Maximize2 } from 'lucide-react';
 import { lifeSections } from '@/data/productivityData';
+import { DetailedSectionView } from '@/components/DetailedSectionView';
 import { cn } from '@/lib/utils';
 
 interface StartMyDayTimerProps {
@@ -14,6 +15,7 @@ export const StartMyDayTimer = ({ onComplete }: StartMyDayTimerProps) => {
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes in seconds
   const [currentBlock, setCurrentBlock] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showDetailedView, setShowDetailedView] = useState(false);
 
   const totalBlocks = 6;
   const blockDuration = 5 * 60; // 5 minutes per block
@@ -51,6 +53,10 @@ export const StartMyDayTimer = ({ onComplete }: StartMyDayTimerProps) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  const openDetailedView = () => {
+    setShowDetailedView(true);
   };
 
   const reset = () => {
@@ -153,10 +159,24 @@ export const StartMyDayTimer = ({ onComplete }: StartMyDayTimerProps) => {
             <h4 className="text-xl font-semibold text-foreground">
               {getCurrentSection().title}
             </h4>
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground mt-2 mb-4">
               Reflect on: {getCurrentSection().goal}
             </p>
+            <Button variant="outline" onClick={openDetailedView}>
+              <Maximize2 className="w-4 h-4 mr-2" />
+              Open Section Details
+            </Button>
           </div>
+        )}
+
+        {showDetailedView && (
+          <DetailedSectionView
+            section={getCurrentSection()}
+            isTimerMode={true}
+            timeRemaining={formatTime(timeLeft)}
+            onClose={() => setShowDetailedView(false)}
+            onTaskComplete={onComplete}
+          />
         )}
       </div>
     </div>

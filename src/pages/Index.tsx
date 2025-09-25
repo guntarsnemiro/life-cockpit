@@ -3,6 +3,7 @@ import { MotivationalQuote } from '@/components/MotivationalQuote';
 import { LifeSectionCard } from '@/components/LifeSectionCard';
 import { StartMyDayTimer } from '@/components/StartMyDayTimer';
 import { MoodCheckIn } from '@/components/MoodCheckIn';
+import { DetailedSectionView } from '@/components/DetailedSectionView';
 import { lifeSections } from '@/data/productivityData';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Calendar, Trophy } from 'lucide-react';
@@ -14,6 +15,7 @@ const Index = () => {
   const [totalPoints, setTotalPoints] = useState(
     lifeSections.reduce((sum, section) => sum + section.points, 0)
   );
+  const [selectedSection, setSelectedSection] = useState<typeof lifeSections[0] | null>(null);
 
   const handleTaskComplete = () => {
     setCompletedTasks(prev => prev + 1);
@@ -109,6 +111,7 @@ const Index = () => {
                   key={section.id}
                   section={section}
                   onTaskComplete={handleTaskComplete}
+                  onSectionClick={() => setSelectedSection(section)}
                 />
               ))}
             </div>
@@ -126,6 +129,15 @@ const Index = () => {
             "The secret to getting ahead is getting started." - Mark Twain
           </p>
         </div>
+
+        {/* Detailed Section View */}
+        {selectedSection && (
+          <DetailedSectionView
+            section={selectedSection}
+            onClose={() => setSelectedSection(null)}
+            onTaskComplete={handleTaskComplete}
+          />
+        )}
       </div>
     </div>
   );
