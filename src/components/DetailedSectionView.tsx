@@ -5,7 +5,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { X, Plus, Check, Lightbulb, Target, Calendar, Zap } from 'lucide-react';
+import { X, Plus, Check, Lightbulb, Target, Calendar, Zap, BarChart3, TrendingUp, DollarSign, Activity } from 'lucide-react';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, LineChart, Line } from 'recharts';
 import { cn } from '@/lib/utils';
 
 interface DetailedSectionViewProps {
@@ -80,6 +82,159 @@ export const DetailedSectionView = ({
     setCurrentIdeaIndex((prev) => (prev + 1) % section.ideas.length);
   };
 
+  const getDashboardData = () => {
+    switch (section.id) {
+      case 'health-fitness':
+        return {
+          weeklyWorkouts: [
+            { day: 'Mon', workouts: 1, calories: 450 },
+            { day: 'Tue', workouts: 0, calories: 0 },
+            { day: 'Wed', workouts: 1, calories: 380 },
+            { day: 'Thu', workouts: 1, calories: 520 },
+            { day: 'Fri', workouts: 0, calories: 0 },
+            { day: 'Sat', workouts: 2, calories: 680 },
+            { day: 'Sun', workouts: 1, calories: 400 }
+          ],
+          healthMetrics: [
+            { metric: 'Sleep', value: 85, color: 'hsl(var(--chart-1))' },
+            { metric: 'Energy', value: 78, color: 'hsl(var(--chart-2))' },
+            { metric: 'Nutrition', value: 92, color: 'hsl(var(--chart-3))' },
+            { metric: 'Fitness', value: 73, color: 'hsl(var(--chart-4))' }
+          ],
+          weightTrend: [
+            { month: 'Jan', weight: 75 },
+            { month: 'Feb', weight: 74.5 },
+            { month: 'Mar', weight: 74 },
+            { month: 'Apr', weight: 73.8 },
+            { month: 'May', weight: 73.5 },
+            { month: 'Jun', weight: 73.2 }
+          ]
+        };
+      
+      case 'family-relationships':
+        return {
+          socialInteractions: [
+            { week: 'W1', family: 8, friends: 5, partner: 14 },
+            { week: 'W2', family: 6, friends: 7, partner: 12 },
+            { week: 'W3', family: 10, friends: 4, partner: 16 },
+            { week: 'W4', family: 7, friends: 8, partner: 13 }
+          ],
+          relationshipHealth: [
+            { relationship: 'Partner', satisfaction: 88, color: 'hsl(var(--chart-1))' },
+            { relationship: 'Family', satisfaction: 82, color: 'hsl(var(--chart-2))' },
+            { relationship: 'Friends', satisfaction: 75, color: 'hsl(var(--chart-3))' },
+            { relationship: 'Social', satisfaction: 70, color: 'hsl(var(--chart-4))' }
+          ],
+          qualityTime: [
+            { activity: 'Date Nights', hours: 8 },
+            { activity: 'Family Time', hours: 12 },
+            { activity: 'Friend Meetups', hours: 6 },
+            { activity: 'Social Events', hours: 4 }
+          ]
+        };
+      
+      case 'finances':
+        return {
+          netWorth: [
+            { month: 'Jan', assets: 85000, liabilities: 25000, netWorth: 60000 },
+            { month: 'Feb', assets: 87500, liabilities: 24500, netWorth: 63000 },
+            { month: 'Mar', assets: 89200, liabilities: 24000, netWorth: 65200 },
+            { month: 'Apr', assets: 91800, liabilities: 23500, netWorth: 68300 },
+            { month: 'May', assets: 94500, liabilities: 23000, netWorth: 71500 },
+            { month: 'Jun', assets: 97200, liabilities: 22500, netWorth: 74700 }
+          ],
+          incomeStreams: [
+            { source: 'Salary', amount: 6500, color: 'hsl(var(--chart-1))' },
+            { source: 'Investments', amount: 850, color: 'hsl(var(--chart-2))' },
+            { source: 'Side Business', amount: 1200, color: 'hsl(var(--chart-3))' },
+            { source: 'Rental Income', amount: 800, color: 'hsl(var(--chart-4))' }
+          ],
+          investmentPortfolio: [
+            { category: 'Stocks', value: 45000, color: 'hsl(var(--chart-1))' },
+            { category: 'Bonds', value: 15000, color: 'hsl(var(--chart-2))' },
+            { category: 'Real Estate', value: 25000, color: 'hsl(var(--chart-3))' },
+            { category: 'Crypto', value: 8000, color: 'hsl(var(--chart-4))' },
+            { category: 'Cash', value: 12000, color: 'hsl(var(--chart-5))' }
+          ]
+        };
+      
+      case 'work-career':
+        return {
+          skillProgress: [
+            { skill: 'Leadership', current: 85, target: 90, color: 'hsl(var(--chart-1))' },
+            { skill: 'Technical', current: 78, target: 85, color: 'hsl(var(--chart-2))' },
+            { skill: 'Communication', current: 82, target: 88, color: 'hsl(var(--chart-3))' },
+            { skill: 'Strategy', current: 75, target: 82, color: 'hsl(var(--chart-4))' }
+          ],
+          performanceMetrics: [
+            { month: 'Jan', productivity: 78, satisfaction: 75, growth: 70 },
+            { month: 'Feb', productivity: 82, satisfaction: 78, growth: 75 },
+            { month: 'Mar', productivity: 85, satisfaction: 80, growth: 78 },
+            { month: 'Apr', productivity: 88, satisfaction: 82, growth: 82 },
+            { month: 'May', productivity: 90, satisfaction: 85, growth: 85 },
+            { month: 'Jun', productivity: 92, satisfaction: 87, growth: 88 }
+          ],
+          networkingActivities: [
+            { activity: 'Conferences', count: 3 },
+            { activity: 'Meetings', count: 12 },
+            { activity: 'Workshops', count: 5 },
+            { activity: 'Online Events', count: 8 }
+          ]
+        };
+      
+      case 'personal-growth':
+        return {
+          learningProgress: [
+            { week: 'W1', books: 2, courses: 1, podcasts: 5, articles: 8 },
+            { week: 'W2', books: 1.5, courses: 2, podcasts: 7, articles: 12 },
+            { week: 'W3', books: 2.5, courses: 1, podcasts: 6, articles: 10 },
+            { week: 'W4', books: 3, courses: 1.5, podcasts: 8, articles: 15 }
+          ],
+          skillAcquisition: [
+            { skill: 'Mindfulness', level: 75, color: 'hsl(var(--chart-1))' },
+            { skill: 'Languages', level: 60, color: 'hsl(var(--chart-2))' },
+            { skill: 'Creativity', level: 85, color: 'hsl(var(--chart-3))' },
+            { skill: 'Critical Thinking', level: 78, color: 'hsl(var(--chart-4))' }
+          ],
+          habitTracking: [
+            { habit: 'Meditation', streak: 45 },
+            { habit: 'Reading', streak: 32 },
+            { habit: 'Journaling', streak: 28 },
+            { habit: 'Learning', streak: 38 }
+          ]
+        };
+      
+      case 'leisure-lifestyle':
+        return {
+          hobbyTime: [
+            { month: 'Jan', creative: 12, sports: 8, travel: 4, social: 16 },
+            { month: 'Feb', creative: 15, sports: 6, travel: 0, social: 18 },
+            { month: 'Mar', creative: 18, sports: 10, travel: 8, social: 14 },
+            { month: 'Apr', creative: 16, sports: 12, travel: 12, social: 20 },
+            { month: 'May', creative: 20, sports: 14, travel: 16, social: 22 },
+            { month: 'Jun', creative: 22, sports: 16, travel: 20, social: 18 }
+          ],
+          experienceTypes: [
+            { type: 'Cultural', count: 8, color: 'hsl(var(--chart-1))' },
+            { type: 'Adventure', count: 5, color: 'hsl(var(--chart-2))' },
+            { type: 'Relaxation', count: 12, color: 'hsl(var(--chart-3))' },
+            { type: 'Social', count: 15, color: 'hsl(var(--chart-4))' }
+          ],
+          satisfactionLevels: [
+            { area: 'Hobbies', satisfaction: 88 },
+            { area: 'Travel', satisfaction: 82 },
+            { area: 'Entertainment', satisfaction: 75 },
+            { area: 'Rest & Recovery', satisfaction: 85 }
+          ]
+        };
+      
+      default:
+        return null;
+    }
+  };
+
+  const dashboardData = getDashboardData();
+
   const yesterdayCompletions = [
     'Completed morning workout routine',
     'Read 15 pages of industry book',
@@ -127,8 +282,9 @@ export const DetailedSectionView = ({
           {/* Content */}
           <div className="flex-1 overflow-hidden">
             <Tabs defaultValue="focus" className="h-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="focus">Focus</TabsTrigger>
+                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
                 <TabsTrigger value="tasks">Tasks</TabsTrigger>
                 <TabsTrigger value="progress">Progress</TabsTrigger>
                 <TabsTrigger value="notes">Notes</TabsTrigger>
@@ -191,6 +347,440 @@ export const DetailedSectionView = ({
                     </ul>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="dashboard" className="space-y-6 mt-6">
+                {dashboardData && (
+                  <div className="space-y-6">
+                    {/* Section-specific Dashboard Content */}
+                    {section.id === 'health-fitness' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="flex items-center space-x-2">
+                                <Activity className="w-5 h-5" />
+                                <span>Weekly Workout Activity</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  workouts: { label: "Workouts", color: "hsl(var(--chart-1))" },
+                                  calories: { label: "Calories", color: "hsl(var(--chart-2))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <BarChart data={dashboardData.weeklyWorkouts}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="day" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Bar dataKey="workouts" fill="hsl(var(--chart-1))" />
+                                </BarChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Health Metrics</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  value: { label: "Score", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <PieChart>
+                                  <Pie
+                                    data={dashboardData.healthMetrics}
+                                    dataKey="value"
+                                    nameKey="metric"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                  >
+                                    {dashboardData.healthMetrics.map((entry, index) => (
+                                      <Cell key={index} fill={entry.color} />
+                                    ))}
+                                  </Pie>
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                </PieChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center space-x-2">
+                              <TrendingUp className="w-5 h-5" />
+                              <span>Weight Trend</span>
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ChartContainer
+                              config={{
+                                weight: { label: "Weight (kg)", color: "hsl(var(--chart-3))" }
+                              }}
+                              className="h-[200px]"
+                            >
+                              <LineChart data={dashboardData.weightTrend}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Line type="monotone" dataKey="weight" stroke="hsl(var(--chart-3))" />
+                              </LineChart>
+                            </ChartContainer>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+
+                    {section.id === 'family-relationships' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Social Interactions</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  family: { label: "Family", color: "hsl(var(--chart-1))" },
+                                  friends: { label: "Friends", color: "hsl(var(--chart-2))" },
+                                  partner: { label: "Partner", color: "hsl(var(--chart-3))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <AreaChart data={dashboardData.socialInteractions}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="week" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Area type="monotone" dataKey="family" stackId="1" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
+                                  <Area type="monotone" dataKey="friends" stackId="1" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
+                                  <Area type="monotone" dataKey="partner" stackId="1" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
+                                </AreaChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Relationship Satisfaction</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-4">
+                                {dashboardData.relationshipHealth.map((item, index) => (
+                                  <div key={index} className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span>{item.relationship}</span>
+                                      <span>{item.satisfaction}%</span>
+                                    </div>
+                                    <div className="w-full bg-muted rounded-full h-2">
+                                      <div 
+                                        className="h-2 rounded-full" 
+                                        style={{ 
+                                          width: `${item.satisfaction}%`,
+                                          backgroundColor: item.color
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+
+                    {section.id === 'finances' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="flex items-center space-x-2">
+                                <TrendingUp className="w-5 h-5" />
+                                <span>Net Worth Trend</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  netWorth: { label: "Net Worth", color: "hsl(var(--chart-1))" },
+                                  assets: { label: "Assets", color: "hsl(var(--chart-2))" },
+                                  liabilities: { label: "Liabilities", color: "hsl(var(--chart-3))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <LineChart data={dashboardData.netWorth}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="month" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Line type="monotone" dataKey="netWorth" stroke="hsl(var(--chart-1))" strokeWidth={3} />
+                                  <Line type="monotone" dataKey="assets" stroke="hsl(var(--chart-2))" />
+                                  <Line type="monotone" dataKey="liabilities" stroke="hsl(var(--chart-3))" />
+                                </LineChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="flex items-center space-x-2">
+                                <DollarSign className="w-5 h-5" />
+                                <span>Monthly Income Streams</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  amount: { label: "Amount ($)", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <PieChart>
+                                  <Pie
+                                    data={dashboardData.incomeStreams}
+                                    dataKey="amount"
+                                    nameKey="source"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                  >
+                                    {dashboardData.incomeStreams.map((entry, index) => (
+                                      <Cell key={index} fill={entry.color} />
+                                    ))}
+                                  </Pie>
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                </PieChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center space-x-2">
+                              <BarChart3 className="w-5 h-5" />
+                              <span>Investment Portfolio</span>
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ChartContainer
+                              config={{
+                                value: { label: "Value ($)", color: "hsl(var(--chart-1))" }
+                              }}
+                              className="h-[200px]"
+                            >
+                              <BarChart data={dashboardData.investmentPortfolio}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="category" />
+                                <YAxis />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Bar dataKey="value">
+                                  {dashboardData.investmentPortfolio.map((entry, index) => (
+                                    <Cell key={index} fill={entry.color} />
+                                  ))}
+                                </Bar>
+                              </BarChart>
+                            </ChartContainer>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+
+                    {section.id === 'work-career' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Skill Development Progress</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-4">
+                                {dashboardData.skillProgress.map((skill, index) => (
+                                  <div key={index} className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span>{skill.skill}</span>
+                                      <span>{skill.current}% / {skill.target}%</span>
+                                    </div>
+                                    <div className="w-full bg-muted rounded-full h-2">
+                                      <div 
+                                        className="h-2 rounded-full" 
+                                        style={{ 
+                                          width: `${(skill.current / skill.target) * 100}%`,
+                                          backgroundColor: skill.color
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Performance Metrics</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  productivity: { label: "Productivity", color: "hsl(var(--chart-1))" },
+                                  satisfaction: { label: "Job Satisfaction", color: "hsl(var(--chart-2))" },
+                                  growth: { label: "Growth", color: "hsl(var(--chart-3))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <LineChart data={dashboardData.performanceMetrics}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="month" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Line type="monotone" dataKey="productivity" stroke="hsl(var(--chart-1))" />
+                                  <Line type="monotone" dataKey="satisfaction" stroke="hsl(var(--chart-2))" />
+                                  <Line type="monotone" dataKey="growth" stroke="hsl(var(--chart-3))" />
+                                </LineChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+
+                    {section.id === 'personal-growth' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Learning Activities</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  books: { label: "Books", color: "hsl(var(--chart-1))" },
+                                  courses: { label: "Courses", color: "hsl(var(--chart-2))" },
+                                  podcasts: { label: "Podcasts", color: "hsl(var(--chart-3))" },
+                                  articles: { label: "Articles", color: "hsl(var(--chart-4))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <AreaChart data={dashboardData.learningProgress}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="week" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Area type="monotone" dataKey="books" stackId="1" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
+                                  <Area type="monotone" dataKey="courses" stackId="1" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
+                                  <Area type="monotone" dataKey="podcasts" stackId="1" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
+                                  <Area type="monotone" dataKey="articles" stackId="1" stroke="hsl(var(--chart-4))" fill="hsl(var(--chart-4))" />
+                                </AreaChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Skill Acquisition Levels</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-4">
+                                {dashboardData.skillAcquisition.map((skill, index) => (
+                                  <div key={index} className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span>{skill.skill}</span>
+                                      <span>{skill.level}%</span>
+                                    </div>
+                                    <div className="w-full bg-muted rounded-full h-2">
+                                      <div 
+                                        className="h-2 rounded-full" 
+                                        style={{ 
+                                          width: `${skill.level}%`,
+                                          backgroundColor: skill.color
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+
+                    {section.id === 'leisure-lifestyle' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Monthly Hobby Time</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  creative: { label: "Creative", color: "hsl(var(--chart-1))" },
+                                  sports: { label: "Sports", color: "hsl(var(--chart-2))" },
+                                  travel: { label: "Travel", color: "hsl(var(--chart-3))" },
+                                  social: { label: "Social", color: "hsl(var(--chart-4))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <BarChart data={dashboardData.hobbyTime}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="month" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Bar dataKey="creative" fill="hsl(var(--chart-1))" />
+                                  <Bar dataKey="sports" fill="hsl(var(--chart-2))" />
+                                  <Bar dataKey="travel" fill="hsl(var(--chart-3))" />
+                                  <Bar dataKey="social" fill="hsl(var(--chart-4))" />
+                                </BarChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Experience Types</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  count: { label: "Count", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <PieChart>
+                                  <Pie
+                                    data={dashboardData.experienceTypes}
+                                    dataKey="count"
+                                    nameKey="type"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                  >
+                                    {dashboardData.experienceTypes.map((entry, index) => (
+                                      <Cell key={index} fill={entry.color} />
+                                    ))}
+                                  </Pie>
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                </PieChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="tasks" className="space-y-4 mt-6">
