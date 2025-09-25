@@ -34,7 +34,10 @@ const Index = () => {
     return (
       <div className="min-h-screen p-6">
         <div className="max-w-4xl mx-auto">
-          <StartMyDayTimer onComplete={handleTimerComplete} />
+          <StartMyDayTimer 
+            onComplete={handleTimerComplete} 
+            onGoHome={() => setShowTimer(false)}
+          />
           
           {showCelebration && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">

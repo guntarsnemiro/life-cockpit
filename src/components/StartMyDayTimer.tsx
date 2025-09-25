@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Play, Pause, RotateCcw, Maximize2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Maximize2, Home } from 'lucide-react';
 import { lifeSections } from '@/data/productivityData';
 import { DetailedSectionView } from '@/components/DetailedSectionView';
 import { cn } from '@/lib/utils';
 
 interface StartMyDayTimerProps {
   onComplete: () => void;
+  onGoHome: () => void;
 }
 
-export const StartMyDayTimer = ({ onComplete }: StartMyDayTimerProps) => {
+export const StartMyDayTimer = ({ onComplete, onGoHome }: StartMyDayTimerProps) => {
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes in seconds
   const [currentBlock, setCurrentBlock] = useState(0);
@@ -93,8 +94,15 @@ export const StartMyDayTimer = ({ onComplete }: StartMyDayTimerProps) => {
 
   return (
     <div className="glass-card rounded-2xl p-8">
+      <div className="flex items-center justify-between mb-6">
+        <Button variant="outline" onClick={onGoHome}>
+          <Home className="w-4 h-4 mr-2" />
+          Home
+        </Button>
+        <h2 className="text-3xl font-bold text-foreground">Start My Day</h2>
+        <div className="w-[100px]"></div> {/* Spacer for centering */}
+      </div>
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-foreground mb-4">Start My Day</h2>
         <p className="text-muted-foreground mb-6">
           30 minutes across 6 life areas • 5 minutes each
         </p>
