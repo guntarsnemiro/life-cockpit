@@ -13,111 +13,111 @@ export const motivationalQuotes = [
 
 export const lifeSections = [
   {
-    id: 'health',
-    title: 'Health',
-    emoji: '🏃‍♂️',
+    id: 'health-fitness',
+    title: 'Health & Fitness',
+    emoji: '⚕️',
     color: 'chart-1', // Cyan
-    goal: 'Lose 10 pounds and feel energetic',
-    currentTask: 'Drink 8 glasses of water today',
+    goal: 'Maintain optimal physical wellbeing and energy',
+    currentTask: 'Complete 30-minute workout session',
     level: 3,
     streak: 7,
     points: 340,
     ideas: [
-      'Take a 10-minute walk after lunch',
-      'Do 20 jumping jacks right now',
-      'Eat a piece of fruit as a snack',
-      'Practice deep breathing for 2 minutes',
-      'Stretch your neck and shoulders'
+      'Schedule annual health checkup',
+      'Plan balanced meals for the week',
+      'Take a 15-minute walk during lunch break',
+      'Practice proper posture at your desk',
+      'Set a consistent sleep schedule'
     ]
   },
   {
-    id: 'sports',
-    title: 'Sports',
-    emoji: '⚽',
+    id: 'family-relationships',
+    title: 'Family & Relationships',
+    emoji: '👥',
     color: 'chart-2', // Coral
-    goal: 'Run a 5K without stopping',
-    currentTask: 'Do 15 push-ups today',
+    goal: 'Build deeper connections with loved ones',
+    currentTask: 'Schedule quality time with partner/family',
     level: 2,
     streak: 12,
     points: 280,
     ideas: [
-      'Try a new workout video on YouTube',
-      'Challenge a friend to a sports activity',
-      'Practice your favorite sport for 30 mins',
-      'Do a quick HIIT workout',
-      'Go for a bike ride around the neighborhood'
+      'Plan a date night or family activity',
+      'Reach out to a friend you haven\'t spoken to recently',
+      'Practice active listening in conversations',
+      'Send a thoughtful message to someone important',
+      'Host a dinner or social gathering'
     ]
   },
   {
     id: 'finances',
     title: 'Finances',
-    emoji: '💰',
+    emoji: '📊',
     color: 'success', // Green
-    goal: 'Save $5,000 for emergency fund',
-    currentTask: 'Review monthly expenses',
+    goal: 'Achieve financial security and independence',
+    currentTask: 'Review investment portfolio performance',
     level: 4,
     streak: 21,
     points: 520,
     ideas: [
-      'Cancel one unused subscription',
-      'Set up automatic savings transfer',
-      'Compare prices before buying something',
-      'Cook dinner at home instead of ordering',
-      'Track your spending for today'
+      'Analyze monthly budget and optimize expenses',
+      'Research new investment opportunities',
+      'Automate savings transfers',
+      'Review insurance coverage needs',
+      'Track net worth progress'
     ]
   },
   {
-    id: 'work',
-    title: 'Work',
-    emoji: '💼',
+    id: 'work-career',
+    title: 'Work & Career',
+    emoji: '📈',
     color: 'chart-3', // Purple
-    goal: 'Get promoted or land dream job',
-    currentTask: 'Complete priority project tasks',
+    goal: 'Advance professional growth and success',
+    currentTask: 'Complete high-priority project milestone',
     level: 5,
     streak: 15,
     points: 680,
     ideas: [
-      'Learn one new skill for 30 minutes',
-      'Network with a colleague or industry contact',
-      'Organize your workspace for efficiency',
-      'Set clear goals for tomorrow',
-      'Read an article in your field'
+      'Update LinkedIn profile and network',
+      'Identify skill gaps and learning opportunities',
+      'Seek feedback from supervisors or peers',
+      'Attend industry webinar or conference',
+      'Document achievements for performance review'
     ]
   },
   {
-    id: 'family',
-    title: 'Family',
-    emoji: '👨‍👩‍👧‍👦',
+    id: 'personal-growth',
+    title: 'Personal Growth & Education',
+    emoji: '📚',
     color: 'warning', // Orange
-    goal: 'Strengthen family relationships',
-    currentTask: 'Have meaningful conversation with loved one',
+    goal: 'Continuously develop skills and mindset',
+    currentTask: 'Read chapter of personal development book',
     level: 3,
     streak: 9,
     points: 390,
     ideas: [
-      'Send a heartfelt message to a family member',
-      'Plan a fun activity for the weekend',
-      'Call someone you haven\'t spoken to in a while',
-      'Share a happy memory with your family',
-      'Help with household chores without being asked'
+      'Take an online course in area of interest',
+      'Practice meditation or mindfulness',
+      'Journal about personal goals and progress',
+      'Learn a new language for 15 minutes',
+      'Attend workshop or seminar'
     ]
   },
   {
-    id: 'mind',
-    title: 'Mind',
-    emoji: '🧠',
+    id: 'leisure-lifestyle',
+    title: 'Leisure & Lifestyle',
+    emoji: '✈️',
     color: 'accent', // Coral accent
-    goal: 'Achieve inner peace and clarity',
-    currentTask: 'Practice 10 minutes of mindfulness',
+    goal: 'Create fulfilling experiences and enjoyment',
+    currentTask: 'Engage in favorite hobby for 30 minutes',
     level: 2,
     streak: 5,
     points: 180,
     ideas: [
-      'Write in a gratitude journal',
-      'Try a 5-minute meditation',
-      'Read a few pages of an inspiring book',
-      'Practice positive affirmations',
-      'Do a brain teaser or puzzle'
+      'Plan weekend getaway or day trip',
+      'Try a new restaurant or cuisine',
+      'Explore local cultural events or museums',
+      'Start a creative project or hobby',
+      'Organize living space for comfort'
     ]
   }
 ];
