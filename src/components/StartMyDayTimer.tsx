@@ -17,6 +17,7 @@ export const StartMyDayTimer = ({ onComplete, onGoHome }: StartMyDayTimerProps) 
   const [currentBlock, setCurrentBlock] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showDetailedView, setShowDetailedView] = useState(false);
+  const [sectionTimeLeft, setSectionTimeLeft] = useState(5 * 60); // 5 minutes per section
 
   const totalBlocks = 6;
   const blockDuration = 5 * 60; // 5 minutes per block
@@ -34,7 +35,13 @@ export const StartMyDayTimer = ({ onComplete, onGoHome }: StartMyDayTimerProps) 
           const newBlock = Math.floor((30 * 60 - newTime) / blockDuration);
           if (newBlock > currentBlock) {
             setCurrentBlock(newBlock);
+            setSectionTimeLeft(5 * 60); // Reset section timer
+            setShowDetailedView(true); // Auto-open detailed view for new section
           }
+          
+          // Update section time left
+          const timeIntoCurrentBlock = (30 * 60 - newTime) % blockDuration;
+          setSectionTimeLeft(blockDuration - timeIntoCurrentBlock);
           
           if (newTime === 0) {
             setIsRunning(false);
@@ -49,6 +56,13 @@ export const StartMyDayTimer = ({ onComplete, onGoHome }: StartMyDayTimerProps) 
     
     return () => clearInterval(interval);
   }, [isRunning, timeLeft, currentBlock, onComplete]);
+
+  // Auto-open detailed view when timer starts
+  useEffect(() => {
+    if (isRunning && timeLeft === 30 * 60 - 1) {
+      setShowDetailedView(true);
+    }
+  }, [isRunning, timeLeft]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -65,6 +79,8 @@ export const StartMyDayTimer = ({ onComplete, onGoHome }: StartMyDayTimerProps) 
     setTimeLeft(30 * 60);
     setCurrentBlock(0);
     setIsCompleted(false);
+    setSectionTimeLeft(5 * 60);
+    setShowDetailedView(false);
   };
 
   const getCurrentSection = () => {
@@ -181,7 +197,7 @@ export const StartMyDayTimer = ({ onComplete, onGoHome }: StartMyDayTimerProps) 
           <DetailedSectionView
             section={getCurrentSection()}
             isTimerMode={true}
-            timeRemaining={formatTime(timeLeft)}
+            timeRemaining={formatTime(sectionTimeLeft)}
             onClose={() => setShowDetailedView(false)}
             onTaskComplete={onComplete}
           />
