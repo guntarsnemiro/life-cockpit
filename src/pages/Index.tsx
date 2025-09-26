@@ -7,21 +7,16 @@ import { DetailedSectionView } from '@/components/DetailedSectionView';
 import { lifeSections } from '@/data/productivityData';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Calendar, Trophy } from 'lucide-react';
-
 const Index = () => {
   const [showTimer, setShowTimer] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedTasks, setCompletedTasks] = useState(0);
-  const [totalPoints, setTotalPoints] = useState(
-    lifeSections.reduce((sum, section) => sum + section.points, 0)
-  );
+  const [totalPoints, setTotalPoints] = useState(lifeSections.reduce((sum, section) => sum + section.points, 0));
   const [selectedSection, setSelectedSection] = useState<typeof lifeSections[0] | null>(null);
-
   const handleTaskComplete = () => {
     setCompletedTasks(prev => prev + 1);
     setTotalPoints(prev => prev + 50);
   };
-
   const handleTimerComplete = () => {
     setShowCelebration(true);
     setTimeout(() => {
@@ -29,18 +24,12 @@ const Index = () => {
       setShowTimer(false);
     }, 5000);
   };
-
   if (showTimer) {
-    return (
-      <div className="min-h-screen p-6">
+    return <div className="min-h-screen p-6">
         <div className="max-w-4xl mx-auto">
-          <StartMyDayTimer 
-            onComplete={handleTimerComplete} 
-            onGoHome={() => setShowTimer(false)}
-          />
+          <StartMyDayTimer onComplete={handleTimerComplete} onGoHome={() => setShowTimer(false)} />
           
-          {showCelebration && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          {showCelebration && <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
               <div className="text-center">
                 <div className="text-8xl mb-6 animate-bounce">🎉</div>
                 <h2 className="text-4xl font-bold text-foreground mb-4">Amazing Work!</h2>
@@ -48,22 +37,16 @@ const Index = () => {
                   You've completed your daily life review session!
                 </p>
               </div>
-            </div>
-          )}
+            </div>}
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen p-6">
+  return <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Stats */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">
-              Life Cockpit Dashboard
-            </h1>
+            <h1 className="text-4xl font-bold text-foreground mb-2">Productivity Stopwatch</h1>
             <p className="text-muted-foreground">
               Your complete life management system
             </p>
@@ -91,11 +74,7 @@ const Index = () => {
 
         {/* Start My Day Button */}
         <div className="mb-8 text-center">
-          <Button 
-            size="lg" 
-            onClick={() => setShowTimer(true)}
-            className="px-12 py-6 text-lg gradient-primary border-0 hover:scale-105 transition-transform"
-          >
+          <Button size="lg" onClick={() => setShowTimer(true)} className="px-12 py-6 text-lg gradient-primary border-0 hover:scale-105 transition-transform">
             <Sparkles className="w-6 h-6 mr-3" />
             Start My Day (30 min)
           </Button>
@@ -109,14 +88,7 @@ const Index = () => {
           {/* Life Section Cards */}
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {lifeSections.map((section) => (
-                <LifeSectionCard
-                  key={section.id}
-                  section={section}
-                  onTaskComplete={handleTaskComplete}
-                  onSectionClick={() => setSelectedSection(section)}
-                />
-              ))}
+              {lifeSections.map(section => <LifeSectionCard key={section.id} section={section} onTaskComplete={handleTaskComplete} onSectionClick={() => setSelectedSection(section)} />)}
             </div>
           </div>
 
@@ -134,16 +106,8 @@ const Index = () => {
         </div>
 
         {/* Detailed Section View */}
-        {selectedSection && (
-          <DetailedSectionView
-            section={selectedSection}
-            onClose={() => setSelectedSection(null)}
-            onTaskComplete={handleTaskComplete}
-          />
-        )}
+        {selectedSection && <DetailedSectionView section={selectedSection} onClose={() => setSelectedSection(null)} onTaskComplete={handleTaskComplete} />}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
