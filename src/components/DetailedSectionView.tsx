@@ -563,10 +563,419 @@ export const DetailedSectionView = ({
 
               <TabsContent value="dashboard" className="space-y-6 mt-6">
                 {dashboardData && (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">
-                      Dashboard with charts and analytics coming soon...
-                    </p>
+                  <div className="space-y-6">
+                    {/* Section-specific Dashboard Content */}
+                    {section.id === 'health-fitness' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="flex items-center space-x-2">
+                                <Activity className="w-5 h-5" />
+                                <span>Weekly Workout Activity</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  workouts: { label: "Workouts", color: "hsl(var(--chart-1))" },
+                                  calories: { label: "Calories", color: "hsl(var(--chart-2))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <BarChart data={dashboardData.weeklyWorkouts}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="day" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Bar dataKey="workouts" fill="hsl(var(--chart-1))" />
+                                </BarChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Health Metrics</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  value: { label: "Score", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <PieChart>
+                                  <Pie
+                                    data={dashboardData.healthMetrics}
+                                    dataKey="value"
+                                    nameKey="metric"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                  >
+                                    {dashboardData.healthMetrics.map((entry, index) => (
+                                      <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                  </Pie>
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                </PieChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Weight Trend</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ChartContainer
+                              config={{
+                                weight: { label: "Weight (kg)", color: "hsl(var(--chart-3))" }
+                              }}
+                              className="h-[200px]"
+                            >
+                              <LineChart data={dashboardData.weightTrend}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Line type="monotone" dataKey="weight" stroke="hsl(var(--chart-3))" strokeWidth={2} />
+                              </LineChart>
+                            </ChartContainer>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+
+                    {section.id === 'family-relationships' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Social Interactions (Weekly)</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  family: { label: "Family", color: "hsl(var(--chart-1))" },
+                                  friends: { label: "Friends", color: "hsl(var(--chart-2))" },
+                                  partner: { label: "Partner", color: "hsl(var(--chart-3))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <AreaChart data={dashboardData.socialInteractions}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="week" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Area type="monotone" dataKey="family" stackId="1" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
+                                  <Area type="monotone" dataKey="friends" stackId="1" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
+                                  <Area type="monotone" dataKey="partner" stackId="1" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
+                                </AreaChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Relationship Health</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  satisfaction: { label: "Satisfaction %", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <BarChart data={dashboardData.relationshipHealth}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="relationship" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Bar dataKey="satisfaction" fill="hsl(var(--chart-2))" />
+                                </BarChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+
+                    {section.id === 'finances' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="flex items-center space-x-2">
+                                <TrendingUp className="w-5 h-5" />
+                                <span>Net Worth Growth</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  netWorth: { label: "Net Worth", color: "hsl(var(--chart-1))" },
+                                  assets: { label: "Assets", color: "hsl(var(--chart-2))" },
+                                  liabilities: { label: "Liabilities", color: "hsl(var(--chart-3))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <LineChart data={dashboardData.netWorth}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="month" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Line type="monotone" dataKey="assets" stroke="hsl(var(--chart-2))" strokeWidth={2} />
+                                  <Line type="monotone" dataKey="liabilities" stroke="hsl(var(--chart-3))" strokeWidth={2} />
+                                  <Line type="monotone" dataKey="netWorth" stroke="hsl(var(--chart-1))" strokeWidth={3} />
+                                </LineChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="flex items-center space-x-2">
+                                <DollarSign className="w-5 h-5" />
+                                <span>Monthly Income Streams</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  amount: { label: "Amount", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <PieChart>
+                                  <Pie
+                                    data={dashboardData.incomeStreams}
+                                    dataKey="amount"
+                                    nameKey="source"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                  >
+                                    {dashboardData.incomeStreams.map((entry, index) => (
+                                      <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                  </Pie>
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                </PieChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Investment Portfolio</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ChartContainer
+                              config={{
+                                value: { label: "Value", color: "hsl(var(--chart-1))" }
+                              }}
+                              className="h-[200px]"
+                            >
+                              <PieChart>
+                                <Pie
+                                  data={dashboardData.investmentPortfolio}
+                                  dataKey="value"
+                                  nameKey="category"
+                                  cx="50%"
+                                  cy="50%"
+                                  outerRadius={80}
+                                >
+                                  {dashboardData.investmentPortfolio.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                  ))}
+                                </Pie>
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                              </PieChart>
+                            </ChartContainer>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+
+                    {section.id === 'work-career' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Skill Development Progress</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  current: { label: "Current", color: "hsl(var(--chart-1))" },
+                                  target: { label: "Target", color: "hsl(var(--chart-2))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <BarChart data={dashboardData.skillProgress}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="skill" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Bar dataKey="current" fill="hsl(var(--chart-1))" />
+                                  <Bar dataKey="target" fill="hsl(var(--chart-2))" opacity={0.5} />
+                                </BarChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Performance Metrics</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  productivity: { label: "Productivity", color: "hsl(var(--chart-1))" },
+                                  satisfaction: { label: "Satisfaction", color: "hsl(var(--chart-2))" },
+                                  growth: { label: "Growth", color: "hsl(var(--chart-3))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <LineChart data={dashboardData.performanceMetrics}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="month" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Line type="monotone" dataKey="productivity" stroke="hsl(var(--chart-1))" strokeWidth={2} />
+                                  <Line type="monotone" dataKey="satisfaction" stroke="hsl(var(--chart-2))" strokeWidth={2} />
+                                  <Line type="monotone" dataKey="growth" stroke="hsl(var(--chart-3))" strokeWidth={2} />
+                                </LineChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+
+                    {section.id === 'personal-growth' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Learning Activities</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  books: { label: "Books", color: "hsl(var(--chart-1))" },
+                                  courses: { label: "Courses", color: "hsl(var(--chart-2))" },
+                                  podcasts: { label: "Podcasts", color: "hsl(var(--chart-3))" },
+                                  articles: { label: "Articles", color: "hsl(var(--chart-4))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <AreaChart data={dashboardData.learningProgress}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="week" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Area type="monotone" dataKey="books" stackId="1" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
+                                  <Area type="monotone" dataKey="courses" stackId="1" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
+                                  <Area type="monotone" dataKey="podcasts" stackId="1" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
+                                  <Area type="monotone" dataKey="articles" stackId="1" stroke="hsl(var(--chart-4))" fill="hsl(var(--chart-4))" />
+                                </AreaChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Skill Acquisition</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  level: { label: "Level", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <BarChart data={dashboardData.skillAcquisition}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="skill" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Bar dataKey="level" fill="hsl(var(--chart-2))" />
+                                </BarChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
+
+                    {section.id === 'leisure-lifestyle' && (
+                      <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Hobby Time Distribution</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  creative: { label: "Creative", color: "hsl(var(--chart-1))" },
+                                  sports: { label: "Sports", color: "hsl(var(--chart-2))" },
+                                  travel: { label: "Travel", color: "hsl(var(--chart-3))" },
+                                  social: { label: "Social", color: "hsl(var(--chart-4))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <AreaChart data={dashboardData.hobbyTime}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="month" />
+                                  <YAxis />
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                  <Area type="monotone" dataKey="creative" stackId="1" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" />
+                                  <Area type="monotone" dataKey="sports" stackId="1" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" />
+                                  <Area type="monotone" dataKey="travel" stackId="1" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" />
+                                  <Area type="monotone" dataKey="social" stackId="1" stroke="hsl(var(--chart-4))" fill="hsl(var(--chart-4))" />
+                                </AreaChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle>Experience Types</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ChartContainer
+                                config={{
+                                  count: { label: "Count", color: "hsl(var(--chart-1))" }
+                                }}
+                                className="h-[250px]"
+                              >
+                                <PieChart>
+                                  <Pie
+                                    data={dashboardData.experienceTypes}
+                                    dataKey="count"
+                                    nameKey="type"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                  >
+                                    {dashboardData.experienceTypes.map((entry, index) => (
+                                      <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                  </Pie>
+                                  <ChartTooltip content={<ChartTooltipContent />} />
+                                </PieChart>
+                              </ChartContainer>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </TabsContent>
