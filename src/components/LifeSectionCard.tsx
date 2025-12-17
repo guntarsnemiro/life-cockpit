@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Lightbulb, Target, CheckSquare, Zap } from 'lucide-react';
+import { Lightbulb, Target, CheckSquare, Zap, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LifeSectionCardProps {
@@ -19,9 +19,19 @@ interface LifeSectionCardProps {
   };
   onTaskComplete: () => void;
   onSectionClick: () => void;
+  isStandupJoined?: boolean;
+  standupMemberCount?: number;
+  onJoinStandup?: () => void;
 }
 
-export const LifeSectionCard = ({ section, onTaskComplete, onSectionClick }: LifeSectionCardProps) => {
+export const LifeSectionCard = ({ 
+  section, 
+  onTaskComplete, 
+  onSectionClick,
+  isStandupJoined = false,
+  standupMemberCount = 0,
+  onJoinStandup
+}: LifeSectionCardProps) => {
   const [currentIdeaIndex, setCurrentIdeaIndex] = useState(0);
   const [isTaskCompleted, setIsTaskCompleted] = useState(false);
 
@@ -49,6 +59,20 @@ export const LifeSectionCard = ({ section, onTaskComplete, onSectionClick }: Lif
     return colorMap[color] || 'text-primary border-primary/30';
   };
 
+  const getBgColorClass = (color: string) => {
+    const colorMap: { [key: string]: string } = {
+      'chart-1': 'bg-chart-1/20',
+      'chart-2': 'bg-chart-2/20',
+      'chart-3': 'bg-chart-3/20',
+      'chart-4': 'bg-chart-4/20',
+      'chart-5': 'bg-chart-5/20',
+      'success': 'bg-success/20',
+      'warning': 'bg-warning/20',
+      'accent': 'bg-accent/20'
+    };
+    return colorMap[color] || 'bg-primary/20';
+  };
+
   return (
     <div 
       className={cn(
@@ -74,6 +98,49 @@ export const LifeSectionCard = ({ section, onTaskComplete, onSectionClick }: Lif
           <div className="text-right">
             <div className="text-sm text-muted-foreground">Streak</div>
             <div className="text-2xl font-bold text-primary">{section.streak}</div>
+          </div>
+        </div>
+
+        {/* Group Standup */}
+        <div className="mb-4">
+          <div 
+            className={cn(
+              "flex items-center justify-between p-3 rounded-xl transition-all duration-200",
+              isStandupJoined ? getBgColorClass(section.color) : "bg-muted/30 hover:bg-muted/50"
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center space-x-3">
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center",
+                isStandupJoined ? getBgColorClass(section.color) : "bg-muted/50"
+              )}>
+                <Users className={cn(
+                  "w-5 h-5",
+                  isStandupJoined ? getColorClass(section.color).split(' ')[0] : "text-muted-foreground"
+                )} />
+              </div>
+              <div>
+                <div className="text-sm font-medium text-foreground">Group Standup</div>
+                <div className="text-xs text-muted-foreground">
+                  {standupMemberCount} {standupMemberCount === 1 ? 'member' : 'members'} active
+                </div>
+              </div>
+            </div>
+            <Button
+              size="sm"
+              variant={isStandupJoined ? "default" : "outline"}
+              onClick={(e) => {
+                e.stopPropagation();
+                onJoinStandup?.();
+              }}
+              className={cn(
+                "min-w-[80px]",
+                isStandupJoined && "bg-success hover:bg-success/90"
+              )}
+            >
+              {isStandupJoined ? 'Joined' : 'Join'}
+            </Button>
           </div>
         </div>
 
