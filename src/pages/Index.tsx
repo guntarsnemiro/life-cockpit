@@ -8,16 +8,31 @@ import { WheelOfLife } from '@/components/WheelOfLife';
 import { lifeSections } from '@/data/productivityData';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Calendar, Trophy } from 'lucide-react';
+import { toast } from 'sonner';
+
+// Simulated standup member counts
+const initialStandupData: Record<string, { joined: boolean; memberCount: number }> = {
+  'health-fitness': { joined: false, memberCount: 24 },
+  'family-relationships': { joined: false, memberCount: 18 },
+  'finances': { joined: false, memberCount: 31 },
+  'work-career': { joined: false, memberCount: 45 },
+  'personal-growth': { joined: false, memberCount: 27 },
+  'leisure-lifestyle': { joined: false, memberCount: 15 },
+};
+
 const Index = () => {
   const [showTimer, setShowTimer] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [totalPoints, setTotalPoints] = useState(lifeSections.reduce((sum, section) => sum + section.points, 0));
   const [selectedSection, setSelectedSection] = useState<typeof lifeSections[0] | null>(null);
+  const [standupData, setStandupData] = useState(initialStandupData);
+
   const handleTaskComplete = () => {
     setCompletedTasks(prev => prev + 1);
     setTotalPoints(prev => prev + 50);
   };
+
   const handleTimerComplete = () => {
     setShowCelebration(true);
     setTimeout(() => {
@@ -25,6 +40,32 @@ const Index = () => {
       setShowTimer(false);
     }, 5000);
   };
+
+  const handleJoinStandup = (sectionId: string) => {
+    setStandupData(prev => {
+      const current = prev[sectionId];
+      const isJoining = !current.joined;
+      
+      if (isJoining) {
+        toast.success('Joined group standup!', {
+          description: `You've joined the ${lifeSections.find(s => s.id === sectionId)?.title} standup group.`
+        });
+      } else {
+        toast.info('Left group standup', {
+          description: `You've left the ${lifeSections.find(s => s.id === sectionId)?.title} standup group.`
+        });
+      }
+
+      return {
+        ...prev,
+        [sectionId]: {
+          joined: isJoining,
+          memberCount: current.memberCount + (isJoining ? 1 : -1)
+        }
+      };
+    });
+  };
+
   if (showTimer) {
     return <div className="min-h-screen p-6">
         <div className="max-w-4xl mx-auto">
@@ -42,6 +83,7 @@ const Index = () => {
         </div>
       </div>;
   }
+
   return <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Stats */}
@@ -89,7 +131,17 @@ const Index = () => {
           {/* Life Section Cards */}
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {lifeSections.map(section => <LifeSectionCard key={section.id} section={section} onTaskComplete={handleTaskComplete} onSectionClick={() => setSelectedSection(section)} />)}
+              {lifeSections.map(section => (
+                <LifeSectionCard 
+                  key={section.id} 
+                  section={section} 
+                  onTaskComplete={handleTaskComplete} 
+                  onSectionClick={() => setSelectedSection(section)}
+                  isStandupJoined={standupData[section.id]?.joined}
+                  standupMemberCount={standupData[section.id]?.memberCount}
+                  onJoinStandup={() => handleJoinStandup(section.id)}
+                />
+              ))}
             </div>
           </div>
 
