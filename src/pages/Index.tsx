@@ -4,6 +4,7 @@ import { LifeSectionCard } from '@/components/LifeSectionCard';
 import { StartMyDayTimer } from '@/components/StartMyDayTimer';
 import { MoodCheckIn } from '@/components/MoodCheckIn';
 import { DetailedSectionView } from '@/components/DetailedSectionView';
+import { WheelOfLife } from '@/components/WheelOfLife';
 import { lifeSections } from '@/data/productivityData';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Calendar, Trophy } from 'lucide-react';
@@ -92,9 +93,10 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Sidebar with Mood Check-in */}
-          <div className="lg:col-span-1">
+          {/* Sidebar with Mood Check-in and Wheel of Life */}
+          <div className="lg:col-span-1 space-y-6">
             <MoodCheckIn />
+            <WheelOfLife />
           </div>
         </div>
 
